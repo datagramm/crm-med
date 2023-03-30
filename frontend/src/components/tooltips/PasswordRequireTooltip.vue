@@ -28,6 +28,10 @@ export default {
       type: String,
       required: true,
     },
+    value3: {
+      type: Boolean,
+      required: true,
+    },
     function: {
       type: String,
       required: true
@@ -53,7 +57,14 @@ export default {
       handler: function(){
         this.compare()
       }
-    }
+    },
+    value3: {
+      deep: true,
+      handler: function(){
+        this.compare()
+      }
+    },
+
   },
   methods:{
     ...mapActions(['addNewTooltip']),
@@ -75,6 +86,10 @@ export default {
           this.getTooltips[this.name] = false
 
         }
+        if (this.function === 'checkPassInBD') {
+          if (!this.value3) return  this.getTooltips[this.name] = true
+          this.getTooltips[this.name] = false
+        }
 
 
       }
@@ -95,7 +110,7 @@ export default {
   align-items: center;
   background: #101828;
   padding: 8px 12px;
-  width: 15vh;
+  width: 13vh;
   height: fit-content;
   border-radius: 8px;
 

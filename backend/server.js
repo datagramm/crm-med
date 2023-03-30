@@ -25,10 +25,11 @@ const corsOption = {
     credentials: true,
 }
 app.use(cors(corsOption))
+app.use('/', userRoutes);
 app.get('/', (req,res) => {
     res.sendFile(path + 'index.html')
 })
-app.use('/', userRoutes);
+
 
 databaseSetup.connectToDataBase()
 

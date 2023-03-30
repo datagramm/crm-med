@@ -110,5 +110,8 @@ h3{
 .active {
   opacity: 1;
 }
+.navigation > *:hover{
+  cursor: pointer;
+}
 
 </style>

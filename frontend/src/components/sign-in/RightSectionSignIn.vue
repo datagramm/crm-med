@@ -11,16 +11,23 @@
     </div>
     <div class="data-input">
       <span>Email</span>
-      <input type="text">
+      <div class="sub">
+      <input type="text" v-model="email">
+        <PasswordRequireTooltip class="passport-tooltip"   v-bind:="{message: 'Password dont match', value3: this.getRedirectState, function: 'checkPassInBD', name: '3'}"></PasswordRequireTooltip>
+
+      </div>
     </div>
 
     <div class="data-input">
       <span>Password</span>
-      <input type="password">
+      <div class="sub">
+      <input type="password" v-model="password">
+      </div>
     </div>
 
     <div class="data-input">
-      <input type="submit" value="Continue" class="submit" style="cursor: pointer">
+
+      <input type="submit" value="Continue" class="submit" style="cursor: pointer" @click="loginUser({email, password})">
     </div>
     <div class="sign-google">
       <div class="google-icon"></div>
@@ -31,8 +38,19 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+import PasswordRequireTooltip from "@/components/tooltips/PasswordRequireTooltip";
 export default {
-  name: "RightSectionSignIn"
+  name: "RightSectionSignIn",
+  components: {PasswordRequireTooltip},
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  methods: mapActions(['loginUser']),
+  computed: mapGetters(['getRedirectState']),
 }
 </script>
 
@@ -209,6 +227,7 @@ span {
 }
 
 .submit {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -247,6 +266,7 @@ span {
 }
 
 .sign-google {
+  margin-top: -8px;
   cursor: pointer;
   display: flex;
   width: 512px;

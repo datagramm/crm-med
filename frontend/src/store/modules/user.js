@@ -8,6 +8,12 @@ export default {
             const result = await request(`/signUp`, 'POST', userCredentials)
 
             ctx.commit('createUser', result )
+        },
+        async loginUser(ctx, userCredentials){
+            console.log(userCredentials)
+            const result = await request(`/signIn`, 'POST', userCredentials)
+
+            ctx.commit('loginUser', result )
         }
     },
     mutations: {
@@ -17,6 +23,13 @@ export default {
                 state.redirect.redirectState = true,
                 router.push({path: '/sign-in'})
             }
+        },
+        loginUser(state, result) {
+            console.log(result)
+            if (result.successSignIn) {
+                state.redirect.redirectState = true,
+                    router.push({path: '/dashboard'})
+            }
         }
 
     },
@@ -24,10 +37,13 @@ export default {
         redirect: {
             redirectState: false,
 
-        }
+        },
+
 
     },
     getters: {
-
+        getRedirectState(state){
+            return state.redirect.redirectState;
+        }
     }
 }

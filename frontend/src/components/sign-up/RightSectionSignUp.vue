@@ -257,7 +257,13 @@ span {
   flex-grow: 1;
 }
 
+.submit:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
 .submit {
+  margin-top: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -296,6 +302,7 @@ span {
 }
 
 .sign-google {
+  margin-top: -8px;
   cursor: pointer;
   display: flex;
   width: 512px;
@@ -332,7 +339,7 @@ input:focus {
 }
 .passport-tooltip {
   position: absolute;
-  right: -21vh;
+  right: -17vh;
 
 
 
@@ -362,6 +369,10 @@ and (max-width : 768px) {
  .data-input, .horizontal-tab, .sign-google{
    width: 80%;
  }
+  .passport-tooltip {
+    display: none;
+  }
+
 
 }
 @media only screen
