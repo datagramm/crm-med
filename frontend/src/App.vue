@@ -7,12 +7,17 @@
 <script>
 
 
+import {mapActions} from "vuex";
 
 export default {
   name: 'App',
-  components: {
-
+  methods: {
+    ...mapActions(['offFloatAnimation'])
+  },
+  mounted() {
+    this.offFloatAnimation()
   }
+
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <form class="container" v-on:submit="createUser({email, firstName, lastName, password, passwordMatch})">
+  <form class="container" :class="{animation: getFloatAnim}" v-on:submit="createUser({email, firstName, lastName, password, passwordMatch})">
 
     <div class="logo"></div>
     <div class="horizontal-tab">
@@ -76,7 +76,7 @@ export default {
     }
 
   },
-  computed: mapGetters(['getTooltips']),
+  computed: mapGetters(['getTooltips', 'getFloatAnim']),
   methods: mapActions(['createUser']),
 
 
@@ -87,6 +87,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  opacity: 1;
   padding-top: 92px;
   display: flex;
   flex-direction: column;
@@ -97,6 +98,21 @@ export default {
   height: 100%;
   gap: 28px;
 }
+.animation {
+  animation: float ease 1.5s;
+}
+@keyframes float {
+  0%{
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
 
 .logo {
   display: flex;
