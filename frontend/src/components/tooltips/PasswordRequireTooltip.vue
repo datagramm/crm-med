@@ -87,8 +87,9 @@ export default {
 
         }
         if (this.function === 'checkPassInBD') {
-          if (!this.value3) return  this.getTooltips[this.name] = true
-          this.getTooltips[this.name] = false
+
+           if (!this.value3) return    this.getTooltips[this.name] = true
+             this.getTooltips[this.name] = false
         }
 
 

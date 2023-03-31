@@ -13,7 +13,8 @@
       <span>Email</span>
       <div class="sub">
       <input type="text" v-model="email">
-        <PasswordRequireTooltip class="passport-tooltip"   v-bind:="{message: 'Password dont match', value3: this.getRedirectState, function: 'checkPassInBD', name: '3'}"></PasswordRequireTooltip>
+        <CircleTooltip v-bind:="{stateTooltip: getTooltips['4']}" v-show="getTooltips['4']"  style="width: 2.5vh;height: 2.5vh; position: absolute; right: 1vh" ></CircleTooltip>
+        <PasswordRequireTooltip class="passport-tooltip"   v-bind:="{message: 'Email not found',value1: email,  value3: getUserCredentials.email, function: 'checkPassInBD', name: '4'}"></PasswordRequireTooltip>
 
       </div>
     </div>
@@ -21,15 +22,19 @@
     <div class="data-input">
       <span>Password</span>
       <div class="sub">
-      <input type="password" v-model="password">
+      <input  type="password" v-model="password">
+        <CircleTooltip v-bind:="{stateTooltip: getTooltips['3']}" v-show="getTooltips['3']"  style="width: 2.5vh;height: 2.5vh; position: absolute; right: 1vh" ></CircleTooltip>
+
+        <PasswordRequireTooltip class="passport-tooltip"   v-bind:="{message: 'Password dont match', value3: getUserCredentials.password, function: 'checkPassInBD', name: '3'}"></PasswordRequireTooltip>
+
       </div>
     </div>
 
     <div class="data-input">
 
-      <input type="submit" value="Continue" class="submit" style="cursor: pointer" @click="loginUser({email, password})">
+      <input type="submit" value="Continue" class="submit" style="cursor: pointer" @click="loginUser({email, password})" >
     </div>
-    <div class="sign-google">
+    <div   class="sign-google">
       <div class="google-icon"></div>
       Sign in with Google
     </div>
@@ -40,17 +45,22 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import PasswordRequireTooltip from "@/components/tooltips/PasswordRequireTooltip";
+import CircleTooltip from "@/components/tooltips/CircleTooltip";
 export default {
   name: "RightSectionSignIn",
-  components: {PasswordRequireTooltip},
+  components: {PasswordRequireTooltip, CircleTooltip},
   data() {
     return {
       email: '',
       password: '',
+
     }
   },
-  methods: mapActions(['loginUser']),
-  computed: mapGetters(['getRedirectState']),
+  methods: {
+    ...mapActions(['loginUser']),
+
+  },
+  computed: mapGetters(['getUserCredentials', 'getTooltips'])
 }
 </script>
 
@@ -303,7 +313,7 @@ input:focus {
 }
 .passport-tooltip {
   position: absolute;
-  right: -21vh;
+  right: -17vh;
 
 
 
@@ -352,6 +362,11 @@ and (max-height : 900px) {
   }
 
 
+}
+.submit:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
 }
 
 
