@@ -1,8 +1,9 @@
 <template>
 
-  <router-link to="/patients" exact-active-class="exact-active" class="left-menu-item">
-  <div class="item-logo"  v-bind:style="{ 'background-image': 'url(' + require(`@/assets/photo/logo/${item.logo}`) + ')' }" ></div>
-  <div class="text-name" >{{item.name}}</div>
+  <router-link :to="item.path" exact-active-class="exact-active" class="left-menu-item">
+    <div class="item-logo"
+         v-bind:style="{ 'mask-image': 'url(' + require(`@/assets/photo/logo/${item.logo}`) + ')' }"></div>
+    <div class="text-name">{{ item.name }}</div>
   </router-link>
 
 </template>
@@ -19,16 +20,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .left-menu-item {
+  text-decoration: none;
   width: 197px;
   height: 40px;
   box-sizing: border-box;
-  padding-left: 15px;
-  gap: 11px;
+  padding-left: 13px;
+  gap: 9px;
   display: flex;
   align-items: center;
 }
+
 .text-name {
   font-family: 'Inter';
   font-style: normal;
@@ -49,12 +52,27 @@ export default {
   order: 3;
   flex-grow: 0;
 }
+
 .item-logo {
+  background-color: rgba(52, 64, 84, 1);
   display: flex;
   width: 24px;
   height: 24px;
-  background-size: contain;
-  background-repeat: no-repeat;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+
+.exact-active {
+  background: #EFF4FF;
+  border-radius: 6px;
+  .item-logo {
+    background-color: rgba(41, 112, 255, 1);
+  }
+
+  .text-name {
+    color: #2970FF;
+  }
+
 }
 
 

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import leftMenuItem from "@/components/main/dashboard/leftMenuItem/leftMenuItem";
+import leftMenuItem from "@/components/main/leftMenuItem/leftMenuItem.vue";
 
 export default {
   name: "leftMenu",
@@ -17,11 +17,11 @@ export default {
   data() {
     return {
       items: [
-        {name: 'Dashboard', logo: "dashboardLogo.svg"},
-        {name: 'Schedule', logo: "scheduleLogo.svg"},
-        {name: 'Patients', logo: "patientLogo.svg"},
-        {name: 'Doctors', logo: "doctorLogo.svg"},
-        {name: 'Finances', logo: "financesLogo.svg"},
+        {name: 'Dashboard', logo: "dashboardLogo.svg", path: '/dashboard'},
+        {name: 'Schedule', logo: "scheduleLogo.svg", path: '/schedule'},
+        {name: 'Patients', logo: "patientLogo.svg", path: '/patients'},
+        {name: 'Doctors', logo: "doctorLogo.svg", path: '/doctors'},
+        {name: 'Finances', logo: "financesLogo.svg", path: '/finances'},
 
 
       ],
@@ -45,11 +45,11 @@ export default {
   margin-top: 48px;
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 14px;
 }
 
 .logo {
-  padding: 4px;
+  margin-left: 4px;
   box-sizing: border-box;
   display: flex;
   width: 147px;
@@ -58,8 +58,5 @@ export default {
   background-size: contain;
   background-repeat: no-repeat;
 }
-.exact-active {
-  background: #EFF4FF;
-  border-radius: 6px;
-}
+
 </style>
