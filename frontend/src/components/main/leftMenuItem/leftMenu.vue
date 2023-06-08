@@ -41,7 +41,7 @@ export default {
 }
 .menu-item{
 
-  height: 100%;
+  /*height: 100%;*/
   margin-top: 48px;
   display: flex;
   flex-direction: column;
