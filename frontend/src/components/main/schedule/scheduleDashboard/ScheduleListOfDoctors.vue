@@ -1,14 +1,15 @@
 <template>
 <table class="schedule-table">
-  <tr><td>Doctor 1</td></tr>
-  <tr><td>Doctor 2</td></tr>
-  <tr><td>Doctor 3</td></tr>
+  <tr v-for="doctor in getDoctors" :key="doctor"><td>{{doctor.name + " " + doctor.surname}}</td></tr>
 </table>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 export default {
-  name: "ScheduleListOfDoctors"
+  name: "ScheduleListOfDoctors",
+
+  computed: mapGetters(['getDoctors'])
 }
 </script>
 

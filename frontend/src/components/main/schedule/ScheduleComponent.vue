@@ -15,9 +15,11 @@
 import leftMenu from "@/components/main/leftMenuItem/leftMenu.vue";
 import ScheduleDashboard from "@/components/main/schedule/scheduleDashboard/ScheduleDashboard";
 import ScheduleListOfDoctors from "@/components/main/schedule/scheduleDashboard/ScheduleListOfDoctors";
+
 export default {
   name: "ScheduleComponent",
-  components: {leftMenu, ScheduleDashboard, ScheduleListOfDoctors}
+  components: {leftMenu, ScheduleDashboard, ScheduleListOfDoctors},
+
 }
 </script>
 

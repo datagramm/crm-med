@@ -1,49 +1,9 @@
 <template>
 <div class="container-dashboard">
-  <div class="user1">
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
+  <div class="group-point" v-for="doctor in getDoctors" :key="doctor">
+   <div class="point" v-for="n in 18" :key="n"></div>
   </div>
-  <div class="user2">
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-    <div class="point1"></div>
-  </div>
+
 
 
 
@@ -53,8 +13,22 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+import {mapActions} from "vuex";
+
 export default {
-  name: "ScheduleDashboard"
+  name: "ScheduleDashboard",
+
+  methods: {
+    ...mapActions(['computeCoordinatesOfPoints'])
+  },
+  mounted() {
+    this.computeCoordinatesOfPoints()
+
+  },
+
+
+  computed: mapGetters(["getDoctors", "getAllPoints"])
 }
 </script>
 
@@ -71,14 +45,14 @@ export default {
    height: 90%;
 
  }
- .point1 {
+ .point {
    color: white;
    clip-path: circle(40%);
    width: 0.5vh;
    height: 0.5vh;
    background-color: white;
  }
- .user1 , .user2 {
+ .group-point {
    justify-content: space-evenly;
    align-items: center;
    height: 5vh;
