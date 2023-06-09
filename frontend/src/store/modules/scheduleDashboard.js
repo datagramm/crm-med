@@ -13,35 +13,51 @@ export default  {
     },
     mutations: {
         dragAndDrop(state, event) {
-            console.log(event.target)
-            let shiftX = event.clientX - event.target.getBoundingClientRect().left;
-            let shiftY = event.clientY - event.target.getBoundingClientRect().top;
 
-            event.target.style.position = 'absolute';
-            event.target.style.zIndex = 1000;
-            document.body.append(event.target);
 
-            moveAt(event.pageX, event.pageY);
 
-            // переносит мяч на координаты (pageX, pageY),
-            // дополнительно учитывая изначальный сдвиг относительно указателя мыши
-            function moveAt(pageX, pageY) {
-                event.target.style.left = pageX - shiftX + 'px';
-                event.target.style.top = pageY - shiftY + 'px';
-            }
+            const onmousedown = (event) => {
+                console.log(event.target)
+                let shiftX = event.clientX - event.target.getBoundingClientRect().left;
+                let shiftY = event.clientY - event.target.getBoundingClientRect().top;
 
-            function onMouseMove(event) {
+                event.target.style.position = 'absolute';
+                // event.target.style.zIndex = 1000;
+                document.body.append(event.target);
+
                 moveAt(event.pageX, event.pageY);
+
+                // переносит мяч на координаты (pageX, pageY),
+                // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+                function moveAt(pageX, pageY) {
+                    event.target.style.left = pageX - shiftX + 'px';
+                    event.target.style.top = pageY - shiftY + 'px';
+                }
+
+                function onMouseMove(event) {
+                    moveAt(event.pageX, event.pageY);
+                }
+
+                // передвигаем мяч при событии mousemove
+                document.addEventListener('mousemove', onMouseMove);
+
+                // отпустить мяч, удалить ненужные обработчики
+                event.target.onmouseup = function() {
+                    event.target.removeEventListener('mousedown', onmousedown)
+                    document.removeEventListener('mousemove', onMouseMove);
+                    event.target.onmouseup = null;
+
+
+                };
             }
 
-            // передвигаем мяч при событии mousemove
-            document.addEventListener('mousemove', onMouseMove);
+            if (event.target.className === 'block') {
+                console.log('its working')
+                event.target.addEventListener('mousedown', onmousedown)
+            }
 
-            // отпустить мяч, удалить ненужные обработчики
-            event.target.onmouseup = function() {
-                document.removeEventListener('mousemove', onMouseMove);
-                event.target.onmouseup = null;
-            };
+
+
         },
 
         mutateCoordinatesOfPoints(state){

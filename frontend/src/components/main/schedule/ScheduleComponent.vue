@@ -1,8 +1,10 @@
 <template>
-  <div class="main-container">
+  <div class="main-container" @click="clearBorderBlock" >
     <leftMenu></leftMenu>
     <div class="right-component">
-      <div class="block" @mousedown="dragAndDrop"></div>
+     <div class="block" @click="handleClickAnim($event); moveBlocks()"
+           :style="{border: activeBlock ? '2px solid lightgreen' : 'none'}"  @dragstart="dragstart"></div>
+
       <div class="schedule-sub">
       <ScheduleListOfDoctors></ScheduleListOfDoctors>
     <ScheduleDashboard></ScheduleDashboard>
@@ -19,9 +21,40 @@ import {mapActions} from "vuex";
 export default {
   name: "ScheduleComponent",
   components: {leftMenu, ScheduleDashboard, ScheduleListOfDoctors},
+  data() {
+    return {
+     activeBlock: false,
+      selectedBlock: null,
+    }
+  },
 
   methods: {
     ...mapActions(["dragAndDrop"]),
+    dragstart(){
+      return false
+    },
+    moveBlocks(){
+      this.dragAndDrop(event)
+    },
+    handleClickAnim: function (event){
+        this.selectedBlock = event.target;
+
+
+      if (this.selectedBlock.className === 'block') {
+
+        this.activeBlock = true
+      }
+
+    },
+    clearBorderBlock: function (event) {
+      if (event.target.className !== 'block') {
+        this.activeBlock = false
+        this.selectedBlock = null
+      }
+
+    },
+
+
   }
 
 }
@@ -45,9 +78,9 @@ export default {
   }
   .block {
     border-radius: 1vh;
-    width: 5vh;
-    height: 2vh;
-    background-color: #4c7cf9;
+    width: 20vh;
+    height: 4vh;
+    background-color: #79798c;
   }
 
 </style>
