@@ -13,25 +13,26 @@ export default  {
     },
     mutations: {
         dragAndDrop(state, event) {
-
+            let closestBlock = event.target.closest('.block')
 
 
             const onmousedown = (event) => {
-                console.log(event.target)
-                let shiftX = event.clientX - event.target.getBoundingClientRect().left;
-                let shiftY = event.clientY - event.target.getBoundingClientRect().top;
 
-                event.target.style.position = 'absolute';
-                // event.target.style.zIndex = 1000;
-                document.body.append(event.target);
+
+                let shiftX = event.clientX - closestBlock.getBoundingClientRect().left;
+                let shiftY = event.clientY - closestBlock.getBoundingClientRect().top;
+
+                closestBlock.style.position = 'absolute';
+                closestBlock.style.zIndex = 1000;
+                document.querySelector('.container-dashboard').append(closestBlock);
 
                 moveAt(event.pageX, event.pageY);
 
                 // переносит мяч на координаты (pageX, pageY),
                 // дополнительно учитывая изначальный сдвиг относительно указателя мыши
                 function moveAt(pageX, pageY) {
-                    event.target.style.left = pageX - shiftX + 'px';
-                    event.target.style.top = pageY - shiftY + 'px';
+                    closestBlock.style.left = pageX - shiftX + 'px';
+                    closestBlock.style.top = pageY - shiftY + 'px';
                 }
 
                 function onMouseMove(event) {
@@ -42,19 +43,67 @@ export default  {
                 document.addEventListener('mousemove', onMouseMove);
 
                 // отпустить мяч, удалить ненужные обработчики
-                event.target.onmouseup = function() {
-                    event.target.removeEventListener('mousedown', onmousedown)
+                closestBlock.onmouseup = function() {
+                    closestBlock.removeEventListener('mousedown', onmousedown)
                     document.removeEventListener('mousemove', onMouseMove);
-                    event.target.onmouseup = null;
+                    closestBlock.onmouseup = null;
 
 
                 };
             }
 
-            if (event.target.className === 'block') {
-                console.log('its working')
-                event.target.addEventListener('mousedown', onmousedown)
+            const changeWidth = (event) => {
+                let shiftX = event.clientX - closestBlock.getBoundingClientRect().left;
+
+
+                closestBlock.style.position = 'absolute';
+                closestBlock.style.zIndex = 1000;
+                document.querySelector('.container-dashboard').append(closestBlock);
+
+                moveAt(event.pageX, event.pageY);
+
+                // переносит мяч на координаты (pageX, pageY),
+                // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+                function moveAt(pageX) {
+                    closestBlock.style.width = pageX - shiftX + 'px';
+
+                }
+
+                function onMouseMove(event) {
+                    moveAt(event.pageX, event.pageY);
+                }
+
+                // передвигаем мяч при событии mousemove
+                document.addEventListener('mousemove', onMouseMove);
+
+                // отпустить мяч, удалить ненужные обработчики
+                closestBlock.onmouseup = function() {
+                    closestBlock.removeEventListener('mousedown', changeWidth)
+                    document.removeEventListener('mousemove', onMouseMove);
+                    closestBlock.removeEventListener('mousemove', onMouseMove);
+                    closestBlock.onmouseup = null;
+
+
+                };
+
             }
+
+            const trigger = (event) => {
+                if (event.target.className === 'block' || event.target.className === 'block shake') {
+                    closestBlock.removeEventListener('mousedown', trigger)
+                    onmousedown(event)
+                }
+                else {
+                    closestBlock.removeEventListener('mousedown', trigger)
+                    changeWidth(event)
+                }
+
+
+            }
+                closestBlock.addEventListener('mousedown', trigger)
+
+
+
 
 
 

@@ -1,9 +1,18 @@
 <template>
-  <div class="main-container" @click="clearBorderBlock" >
+  <div class="main-container"  >
     <leftMenu></leftMenu>
     <div class="right-component">
-     <div class="block" @click="handleClickAnim($event); moveBlocks()"
-           :style="{border: activeBlock ? '2px solid lightgreen' : 'none'}"  @dragstart="dragstart"></div>
+     <div class="block"
+          @click="handleClickAnim($event); moveBlocks($event)"
+          @mousedown="animationBlock = false"
+          @mouseup="activeBlock = false"
+          :class="{'shake': animationBlock}"
+          :style="{border: activeBlock ? '2px solid lightgreen' : '1px solid grey' }"
+          @dragstart="dragstart">
+       <div class="block-arrow-left" @mouseup="activeBlock = false" ></div>
+       <div class="block-arrow-right"></div>
+
+     </div>
 
       <div class="schedule-sub">
       <ScheduleListOfDoctors></ScheduleListOfDoctors>
@@ -23,8 +32,9 @@ export default {
   components: {leftMenu, ScheduleDashboard, ScheduleListOfDoctors},
   data() {
     return {
+      animationBlock: false,
      activeBlock: false,
-      selectedBlock: null,
+
     }
   },
 
@@ -33,26 +43,18 @@ export default {
     dragstart(){
       return false
     },
-    moveBlocks(){
+    moveBlocks(event){
       this.dragAndDrop(event)
     },
-    handleClickAnim: function (event){
-        this.selectedBlock = event.target;
+    handleClickAnim: function (){
 
 
-      if (this.selectedBlock.className === 'block') {
-
+        this.animationBlock = true
         this.activeBlock = true
-      }
+
 
     },
-    clearBorderBlock: function (event) {
-      if (event.target.className !== 'block') {
-        this.activeBlock = false
-        this.selectedBlock = null
-      }
 
-    },
 
 
   }
@@ -76,11 +78,41 @@ export default {
     width: 90%;
     height: 80%;
   }
+  .block-arrow-left, .block-arrow-right {
+    width: 10px;
+    height: 100%;
+    background-color: #454050;
+
+  }
   .block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    transition: border 0.2s;
     border-radius: 1vh;
-    width: 20vh;
-    height: 4vh;
+    width: 180px;
+    height: 50px;
     background-color: #79798c;
+  }
+  .shake {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+
+  }
+
+  @keyframes shake {
+    0% {
+      width: 170px;
+      height: 40px;
+    }
+    50% {
+      width: 190px;
+      height: 60px;
+    }
+    100% {
+      width: 180px;
+      height: 50px;
+    }
   }
 
 </style>
