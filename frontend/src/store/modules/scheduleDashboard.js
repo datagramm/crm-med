@@ -52,54 +52,58 @@ export default  {
                 };
             }
 
-            const changeWidth = (event) => {
-                let shiftX = event.clientX - closestBlock.getBoundingClientRect().left;
 
-
-                closestBlock.style.position = 'absolute';
-                closestBlock.style.zIndex = 1000;
-                document.querySelector('.container-dashboard').append(closestBlock);
-
-                moveAt(event.pageX, event.pageY);
-
-                // переносит мяч на координаты (pageX, pageY),
-                // дополнительно учитывая изначальный сдвиг относительно указателя мыши
-                function moveAt(pageX) {
-                    closestBlock.style.width = pageX - shiftX + 'px';
-
-                }
-
-                function onMouseMove(event) {
-                    moveAt(event.pageX, event.pageY);
-                }
-
-                // передвигаем мяч при событии mousemove
-                document.addEventListener('mousemove', onMouseMove);
-
-                // отпустить мяч, удалить ненужные обработчики
-                closestBlock.onmouseup = function() {
-                    closestBlock.removeEventListener('mousedown', changeWidth)
-                    document.removeEventListener('mousemove', onMouseMove);
-                    closestBlock.removeEventListener('mousemove', onMouseMove);
-                    closestBlock.onmouseup = null;
-
-
-                };
-
-            }
-
-            const trigger = (event) => {
-                if (event.target.className === 'block' || event.target.className === 'block shake') {
+            const trigger = (eventTrigger) => {
+                if (eventTrigger.target.className === 'block' || eventTrigger.target.className === 'block shake') {
                     closestBlock.removeEventListener('mousedown', trigger)
-                    onmousedown(event)
+                    onmousedown(eventTrigger)
                 }
                 else {
                     closestBlock.removeEventListener('mousedown', trigger)
-                    changeWidth(event)
+                    changeWidth(eventTrigger)
                 }
 
 
             }
+
+
+            const minimum_size = 20;
+            let original_width = 0;
+            let original_x = 0;
+            let original_mouse_x = 0;
+
+            const changeWidth = (e) => {
+
+
+
+                original_width = parseFloat(getComputedStyle(closestBlock, null).getPropertyValue('width').replace('px', ''));
+                original_x = closestBlock.getBoundingClientRect().left;
+                original_mouse_x = e.pageX;
+
+                const resize = (event) => {
+                    if (e.target.className === 'block-arrow-right') {
+                        closestBlock.style.width = event.pageX - closestBlock.getBoundingClientRect().left + 'px'
+                    }
+                    if (e.target.className === 'block-arrow-left') {
+
+                        const width = original_width - (event.pageX - original_mouse_x)
+                        if (width > minimum_size) {
+                            closestBlock.style.width = width + 'px'
+                            closestBlock.style.left = original_x + (event.pageX - original_mouse_x) + 'px'
+                        }
+                    }
+                }
+
+                document.addEventListener('mousemove', resize)
+
+                closestBlock.onmouseup = () => {
+                    document.removeEventListener('mousemove', resize)
+                    closestBlock.onmouseup = null
+
+                }
+            }
+
+
                 closestBlock.addEventListener('mousedown', trigger)
 
 

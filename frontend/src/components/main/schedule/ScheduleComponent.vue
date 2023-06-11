@@ -6,12 +6,14 @@
           @click="handleClickAnim($event); moveBlocks($event)"
           @mousedown="animationBlock = false"
           @mouseup="activeBlock = false"
-          :class="{'shake': animationBlock}"
           :style="{border: activeBlock ? '2px solid lightgreen' : '1px solid grey' }"
           @dragstart="dragstart">
-       <div class="block-arrow-left" @mouseup="activeBlock = false" ></div>
-       <div class="block-arrow-right"></div>
-
+       <transition name="fade">
+         <div v-show="activeBlock" class="block-arrow-left" @mouseup="activeBlock = false" ></div>
+       </transition>
+       <transition name="fade">
+       <div v-show="activeBlock" class="block-arrow-right"></div>
+       </transition>
      </div>
 
       <div class="schedule-sub">
@@ -95,24 +97,16 @@ export default {
     height: 50px;
     background-color: #79798c;
   }
-  .shake {
-    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
   }
 
-  @keyframes shake {
-    0% {
-      width: 170px;
-      height: 40px;
-    }
-    50% {
-      width: 190px;
-      height: 60px;
-    }
-    100% {
-      width: 180px;
-      height: 50px;
-    }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
+
 
 </style>
