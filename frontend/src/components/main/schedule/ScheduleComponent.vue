@@ -3,9 +3,11 @@
     <leftMenu></leftMenu>
     <div class="right-component">
      <div class="block"
-          @click="handleClickAnim($event); moveBlocks($event)"
+          v-for="card in getCards" :key="card"
+          @click="handleClickAnim($event); moveBlocks({event: $event, cardId: card.id, cardDropped: card.dropped})"
           @mousedown="animationBlock = false"
           @mouseup="activeBlock = false"
+
           :style="{border: activeBlock ? '2px solid lightgreen' : '1px solid grey' }"
           @dragstart="dragstart">
        <transition name="fade">
@@ -15,6 +17,7 @@
        <div v-show="activeBlock" class="block-arrow-right"></div>
        </transition>
      </div>
+
 
       <div class="schedule-sub">
       <ScheduleListOfDoctors></ScheduleListOfDoctors>
@@ -28,7 +31,7 @@
 import leftMenu from "@/components/main/leftMenuItem/leftMenu.vue";
 import ScheduleDashboard from "@/components/main/schedule/scheduleDashboard/ScheduleDashboard";
 import ScheduleListOfDoctors from "@/components/main/schedule/scheduleDashboard/ScheduleListOfDoctors";
-import {mapActions} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: "ScheduleComponent",
   components: {leftMenu, ScheduleDashboard, ScheduleListOfDoctors},
@@ -36,7 +39,10 @@ export default {
     return {
       animationBlock: false,
      activeBlock: false,
-
+      dropped: false,
+      cards: [{
+        id: '1'
+      }],
     }
   },
 
@@ -45,21 +51,20 @@ export default {
     dragstart(){
       return false
     },
-    moveBlocks(event){
-      this.dragAndDrop(event)
+    moveBlocks(payload){
+     this.dragAndDrop(payload)
     },
-    handleClickAnim: function (){
 
+    handleClickAnim: function (){
 
         this.animationBlock = true
         this.activeBlock = true
 
 
     },
+  },
 
-
-
-  }
+  computed: mapGetters(['getCards'])
 
 }
 </script>

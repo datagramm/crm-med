@@ -5,18 +5,47 @@ export default  {
         computeCoordinatesOfPoints(ctx){
             ctx.commit('mutateCoordinatesOfPoints')
         },
-       dragAndDrop(ctx, event) {
-            ctx.commit('dragAndDrop', event)
-       }
+       dragAndDrop(ctx, payload) {
+            console.log(payload)
+            ctx.commit('dragAndDrop', payload)
+       },
+
 
 
     },
     mutations: {
-        dragAndDrop(state, event) {
-            let closestBlock = event.target.closest('.block')
+
+
+
+        dragAndDrop(state, payload) {
+            let closestBlock = payload.event.target.closest('.block')
+
+               function addBlock(){
+                   state.cards.push({id: Math.floor(Math.random() * 10000) , dropped: false})
+                   console.log(state.cards)
+               }
+
+
+               function filterCard(id){
+                   state.cards.forEach(card => {if (card.id === id) card.dropped = true})
+                   addBlock();
+               }
 
 
             const onmousedown = (event) => {
+
+                let startPositionX = closestBlock.getBoundingClientRect().left
+                let startPositionY = closestBlock.getBoundingClientRect().top
+
+
+                let board = document.querySelector('.container-dashboard')
+                let boardX =  board.getBoundingClientRect().left
+                let boardY = board.getBoundingClientRect().top
+                let boardBottom = board.getBoundingClientRect().bottom
+                let boardRight = board.getBoundingClientRect().right
+
+
+
 
 
                 let shiftX = event.clientX - closestBlock.getBoundingClientRect().left;
@@ -28,8 +57,26 @@ export default  {
 
                 moveAt(event.pageX, event.pageY);
 
-                // переносит мяч на координаты (pageX, pageY),
-                // дополнительно учитывая изначальный сдвиг относительно указателя мыши
+                function checkPositionOfBlock() {
+                    let currentPosX = closestBlock.getBoundingClientRect().left
+                    let currentPosY = closestBlock.getBoundingClientRect().top
+                    let currentBottomX = closestBlock.getBoundingClientRect().bottom
+                    let currentRightY = closestBlock.getBoundingClientRect().right
+
+                    if (boardX > currentPosX || boardY > currentPosY || currentBottomX > boardBottom ||
+                    boardRight < currentRightY
+                    ) {
+                        closestBlock.style.left = startPositionX + 'px'
+                        closestBlock.style.top = startPositionY + 'px'
+
+                    } else {
+                        closestBlock.classList.add('dropped');
+                       if (!payload.cardDropped) filterCard(payload.cardId)
+                    }
+                }
+
+
+
                 function moveAt(pageX, pageY) {
                     closestBlock.style.left = pageX - shiftX + 'px';
                     closestBlock.style.top = pageY - shiftY + 'px';
@@ -39,22 +86,22 @@ export default  {
                     moveAt(event.pageX, event.pageY);
                 }
 
-                // передвигаем мяч при событии mousemove
+
                 document.addEventListener('mousemove', onMouseMove);
 
-                // отпустить мяч, удалить ненужные обработчики
+
                 closestBlock.onmouseup = function() {
                     closestBlock.removeEventListener('mousedown', onmousedown)
                     document.removeEventListener('mousemove', onMouseMove);
                     closestBlock.onmouseup = null;
-
+                   checkPositionOfBlock()
 
                 };
             }
 
 
             const trigger = (eventTrigger) => {
-                if (eventTrigger.target.className === 'block' || eventTrigger.target.className === 'block shake') {
+                if (eventTrigger.target.classList.contains('block')) {
                     closestBlock.removeEventListener('mousedown', trigger)
                     onmousedown(eventTrigger)
                 }
@@ -146,8 +193,9 @@ export default  {
           {name: 'Petro', surname: 'Noname'},
           {name: 'Vasiliy', surname: 'Noname'},
       ],
-        points: []
-        ,
+        points: [],
+        cards: [{id: 1, dropped: false}],
+
     },
     getters: {
         getDoctors(state) {
@@ -155,6 +203,9 @@ export default  {
         },
         getAllPoints(state){
             return state.points
+        },
+        getCards(state) {
+            return state.cards
         }
 
     }
