@@ -19,10 +19,19 @@ export default  {
 
         dragAndDrop(state, payload) {
             let closestBlock = payload.event.target.closest('.block')
+                borderEffect(payload.cardId)
 
                function addBlock(){
-                   state.cards.push({id: Math.floor(Math.random() * 10000) , dropped: false})
+                   state.cards.push({id: Math.floor(Math.random() * 10000) , dropped: false, border: false, colorStatus: 'yellow', tittleText: 'This will be a text'})
                    console.log(state.cards)
+               }
+
+               function borderEffect(id){
+                state.currentCardId = id;
+                state.cards.forEach(card => {
+                    card.border = card.id === id;
+                })
+
                }
 
 
@@ -52,7 +61,7 @@ export default  {
                 let shiftY = event.clientY - closestBlock.getBoundingClientRect().top;
 
                 closestBlock.style.position = 'absolute';
-                closestBlock.style.zIndex = 1000;
+
                 document.querySelector('.container-dashboard').append(closestBlock);
 
                 moveAt(event.pageX, event.pageY);
@@ -101,9 +110,12 @@ export default  {
 
 
             const trigger = (eventTrigger) => {
+
                 if (eventTrigger.target.classList.contains('block')) {
-                    closestBlock.removeEventListener('mousedown', trigger)
-                    onmousedown(eventTrigger)
+
+                        closestBlock.removeEventListener('mousedown', trigger)
+                    if (state.currentCardId === payload.cardId)   onmousedown(eventTrigger)
+
                 }
                 else {
                     closestBlock.removeEventListener('mousedown', trigger)
@@ -143,19 +155,20 @@ export default  {
 
                 document.addEventListener('mousemove', resize)
 
-                closestBlock.onmouseup = () => {
+                document.onmouseup = () => {
                     document.removeEventListener('mousemove', resize)
                     closestBlock.onmouseup = null
 
                 }
+                closestBlock.onmouseup = () => {
+                    document.removeEventListener('mousemove', resize)
+                    closestBlock.onmouseup = null
+
+
+                }
             }
 
-
                 closestBlock.addEventListener('mousedown', trigger)
-
-
-
-
 
 
         },
@@ -194,7 +207,8 @@ export default  {
           {name: 'Vasiliy', surname: 'Noname'},
       ],
         points: [],
-        cards: [{id: 1, dropped: false}],
+        cards: [{id: 1, dropped: false, border: false, colorStatus: 'yellow', tittleText: 'Some text for card'}],
+        currentCardId: null,
 
     },
     getters: {
