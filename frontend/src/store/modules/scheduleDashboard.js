@@ -8,6 +8,7 @@ export default  {
        dragAndDrop(ctx, payload) {
             console.log(payload)
             ctx.commit('dragAndDrop', payload)
+           ctx.commit('timeLineEffect', payload)
        },
 
 
@@ -15,7 +16,16 @@ export default  {
     },
     mutations: {
 
+        timeLineEffect(state,payload){
+            if (payload.cardDropped) {
+                let block = payload.event.target.closest('.block')
+                let line = document.querySelector('.time-line')
+                line.style.width = block.offsetWidth + 'px'
+                line.style.left =  block.getBoundingClientRect().left + 'px'
 
+
+            }
+        },
 
         dragAndDrop(state, payload) {
             let closestBlock = payload.event.target.closest('.block')

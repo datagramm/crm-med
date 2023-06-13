@@ -1,7 +1,7 @@
 <template>
 <div class="container-dashboard">
   <div class="group-point" v-for="doctor in getDoctors" :key="doctor">
-   <div class="point" v-for="n in 18" :key="n"></div>
+   <div class="point" v-for="n in 19" :key="n"></div>
   </div>
 
 
@@ -36,13 +36,12 @@ export default {
  .container-dashboard {
    flex-direction: column;
    display: flex;
-   padding: 3vh;
    box-sizing: border-box;
-   border: 2px solid white;
-   border-radius: 1vh;
-   background-color: #454050;
-   width: 70%;
-   height: 90%;
+
+   border-radius: 1vh 0 0 0;
+   background-color: #628EFF;
+   width: 80%;
+   height: 100%;
 
  }
  .point {
@@ -55,7 +54,7 @@ export default {
  .group-point {
    justify-content: space-evenly;
    align-items: center;
-   height: 5vh;
+   height: 100px;
    width: 100%;
    display: flex;
  }
