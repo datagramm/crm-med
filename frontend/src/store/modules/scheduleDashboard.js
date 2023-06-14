@@ -18,22 +18,23 @@ export default  {
 
         timeLineEffect(state,payload){
             if (payload.cardDropped) {
-                let block = payload.event.target.closest('.block')
-                let line = document.querySelector('.time-line')
-                line.style.width = block.offsetWidth + 'px'
-                line.style.left =  block.getBoundingClientRect().left + 'px'
-
+                    let block = payload.event.target.closest('.block')
+                    let line = document.querySelector('.time-line')
+                    line.style.width = block.offsetWidth + 'px'
+                    line.style.left =  block.getBoundingClientRect().left + 'px'
 
             }
         },
 
         dragAndDrop(state, payload) {
+
             let closestBlock = payload.event.target.closest('.block')
+            state.timeLine = !!payload.cardDropped;
                 borderEffect(payload.cardId)
 
                function addBlock(){
                    state.cards.push({id: Math.floor(Math.random() * 10000) , dropped: false, border: false, colorStatus: 'yellow', tittleText: 'This will be a text'})
-                   console.log(state.cards)
+
                }
 
                function borderEffect(id){
@@ -49,9 +50,16 @@ export default  {
                    state.cards.forEach(card => {if (card.id === id) card.dropped = true})
                    addBlock();
                }
+               function slideAnim(){
+               state.slideAnim = true;
+               setTimeout(() => {
+                   state.slideAnim = false
+               }, 500)
+            }
 
 
             const onmousedown = (event) => {
+
 
                 let startPositionX = closestBlock.getBoundingClientRect().left
                 let startPositionY = closestBlock.getBoundingClientRect().top
@@ -89,14 +97,21 @@ export default  {
                         closestBlock.style.top = startPositionY + 'px'
 
                     } else {
+
+                        state.timeLine = false
                         closestBlock.classList.add('dropped');
-                       if (!payload.cardDropped) filterCard(payload.cardId)
+                       if (!payload.cardDropped) {
+                           slideAnim()
+                           filterCard(payload.cardId)
+                       }
                     }
                 }
 
 
 
                 function moveAt(pageX, pageY) {
+                    let line = document.querySelector('.time-line')
+                    line.style.left = pageX - shiftX + 'px';
                     closestBlock.style.left = pageX - shiftX + 'px';
                     closestBlock.style.top = pageY - shiftY + 'px';
                 }
@@ -117,6 +132,7 @@ export default  {
 
                 };
             }
+
 
 
             const trigger = (eventTrigger) => {
@@ -150,13 +166,18 @@ export default  {
                 original_mouse_x = e.pageX;
 
                 const resize = (event) => {
+                    let line = document.querySelector('.time-line')
                     if (e.target.className === 'block-arrow-right') {
+
+                        line.style.width = event.pageX - closestBlock.getBoundingClientRect().left + 'px'
                         closestBlock.style.width = event.pageX - closestBlock.getBoundingClientRect().left + 'px'
                     }
                     if (e.target.className === 'block-arrow-left') {
 
                         const width = original_width - (event.pageX - original_mouse_x)
                         if (width > minimum_size) {
+                            line.style.width = width + 'px'
+                            line.style.left = original_x + (event.pageX - original_mouse_x) + 'px'
                             closestBlock.style.width = width + 'px'
                             closestBlock.style.left = original_x + (event.pageX - original_mouse_x) + 'px'
                         }
@@ -219,6 +240,8 @@ export default  {
         points: [],
         cards: [{id: 1, dropped: false, border: false, colorStatus: 'yellow', tittleText: 'Some text for card'}],
         currentCardId: null,
+        timeLine: false,
+        slideAnim: false
 
     },
     getters: {
@@ -230,6 +253,12 @@ export default  {
         },
         getCards(state) {
             return state.cards
+        },
+        getTimeLine(state) {
+            return state.timeLine
+        },
+        getSlideAnim(state) {
+            return state.slideAnim
         }
 
     }

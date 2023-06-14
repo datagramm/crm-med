@@ -10,6 +10,7 @@
           v-for="card in getCards" :key="card"
           @click="handleClickAnim($event); moveBlocks({event: $event, cardId: card.id, cardDropped: card.dropped, border:card.border})"
           :style="{border: card.border  ? '2px solid lightgreen' : '2px solid white' }"
+          :class="{slideAnimKey: !card.dropped && getSlideAnim}"
           @mouseup="card.border = false"
           @dragstart="dragstart">
        <div class="status" :style="{backgroundColor: card.colorStatus}"></div>
@@ -40,8 +41,10 @@
       </div>
 
       <div class="timeline">
-        <div class="time-line"></div>
-        <div  v-for="hour in timeline" :key="hour"  class="sub-hour">
+        <transition name="fade">
+          <div class="time-line" v-show="this.getTimeLine"></div>
+        </transition>
+        <div  v-for="hour in timelineArray" :key="hour"  class="sub-hour">
         <div class="point">{{hour}}</div>
         </div>
       </div>
@@ -64,7 +67,7 @@ export default {
   data() {
     return {
       dropped: false,
-      timeline: [8, '', 9, '', 10, '', 11, '', 12, '', 13, '', 14, '', 15, '', 16, '', 17]
+      timelineArray: [8, '', 9, '', 10, '', 11, '', 12, '', 13, '', 14, '', 15, '', 16, '', 17]
     }
   },
 
@@ -83,7 +86,7 @@ export default {
     },
   },
 
-  computed: mapGetters(['getCards'])
+  computed: mapGetters(['getCards', 'getTimeLine', 'getSlideAnim'])
 
 }
 </script>
@@ -234,7 +237,20 @@ export default {
     border-radius: 100%;
     background-color: white;
   }
+  .slideAnimKey {
+    animation: slideAnim 0.5s;
+  }
+  @keyframes slideAnim {
+   0% {
+     transform: translateX(-100px);
+     opacity: 0;
+   }
+   100% {
+     transform: translateX(0px);
+     opacity: 1;
+   }
 
+  }
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.5s ease;
