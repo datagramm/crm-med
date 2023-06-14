@@ -21,7 +21,7 @@ export default {
   }
   .schedule-table  {
     border-radius: 0 1vh 0 0;
-    background-color: #628EFF;
+    background-color: rgba(243, 243, 243, 0.99);
     height: 100%;
     margin: 0;
     padding: 0;

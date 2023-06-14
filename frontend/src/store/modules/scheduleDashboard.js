@@ -31,10 +31,16 @@ export default  {
             let closestBlock = payload.event.target.closest('.block')
             state.timeLine = !!payload.cardDropped;
                 borderEffect(payload.cardId)
+                getCurrentBlockDimension()
 
                function addBlock(){
                    state.cards.push({id: Math.floor(Math.random() * 10000) , dropped: false, border: false, colorStatus: 'yellow', tittleText: 'This will be a text'})
 
+               }
+
+               function getCurrentBlockDimension() {
+                    state.currentBlockWidth = closestBlock.offsetWidth
+                   state.currentBlockHeight = closestBlock.offsetHeight
                }
 
                function borderEffect(id){
@@ -241,7 +247,9 @@ export default  {
         cards: [{id: 1, dropped: false, border: false, colorStatus: 'yellow', tittleText: 'Some text for card'}],
         currentCardId: null,
         timeLine: false,
-        slideAnim: false
+        slideAnim: false,
+        currentBlockWidth: null,
+        currentBlockHeight: null,
 
     },
     getters: {
@@ -259,7 +267,17 @@ export default  {
         },
         getSlideAnim(state) {
             return state.slideAnim
+        },
+        getBlockDimension(state) {
+            return {
+                h: state.currentBlockHeight,
+                w:state.currentBlockWidth
+            }
+        },
+        getCurrentBlock(state) {
+            return state.currentCardId
         }
+
 
     }
 }

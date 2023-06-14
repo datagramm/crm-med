@@ -9,7 +9,11 @@
      <div class="block"
           v-for="card in getCards" :key="card"
           @click="handleClickAnim($event); moveBlocks({event: $event, cardId: card.id, cardDropped: card.dropped, border:card.border})"
-          :style="{border: card.border  ? '2px solid lightgreen' : '2px solid white' }"
+          :style="{border: card.border  ? '2px solid lightgreen' : '2px solid white',
+           width: (getCurrentBlock === card.id) ?  (card.border  ? `${getBlockDimension.w + 15}px` : `${getBlockDimension.w}px`) : null,
+            height: card.border && (getCurrentBlock === card.id) ? `${getBlockDimension.h + 5}px` : `${getBlockDimension.h}px`
+
+           }"
           :class="{slideAnimKey: !card.dropped && getSlideAnim}"
           @mouseup="card.border = false"
           @dragstart="dragstart">
@@ -86,7 +90,7 @@ export default {
     },
   },
 
-  computed: mapGetters(['getCards', 'getTimeLine', 'getSlideAnim'])
+  computed: mapGetters(['getCards', 'getTimeLine', 'getSlideAnim', 'getBlockDimension', "getCurrentBlock"])
 
 }
 </script>
@@ -182,6 +186,7 @@ export default {
 
   }
   .block {
+
     position: relative;
     padding-left: 12px;
     box-sizing: border-box;
@@ -190,11 +195,12 @@ export default {
     justify-content: flex-start;
     align-items: center;
     overflow: hidden;
-    transition: border 0.2s;
+    transition: width 0.5s, height .5s, border .5s;
     border-radius: 1vh;
     width: 200px;
     height: 60px;
-    background-color: #b2ccff;
+    background-color: white;
+    box-shadow: 1px 5px 5px lightgray;
   }
 
   .arrow {
@@ -212,7 +218,8 @@ export default {
     gap: 3px;
   }
   .tittle {
-    color: white;
+    font-weight: bolder;
+    color: #344054;
 
   }
   .texts {
@@ -224,11 +231,11 @@ export default {
 
   }
   .time {
-    color: white;
+    color: darkgray;
     font-size: 10px;
   }
   .text {
-    color: lightgray;
+    color: #344054;
     font-size: 10px;
   }
   .image-patient {

@@ -39,17 +39,16 @@ export default {
    box-sizing: border-box;
 
    border-radius: 1vh 0 0 0;
-   background-color: #628EFF;
+   background-color: rgba(243, 243, 243, 0.99);
    width: 80%;
    height: 100%;
 
  }
  .point {
-   color: white;
    clip-path: circle(40%);
    width: 0.5vh;
    height: 0.5vh;
-   background-color: white;
+   background-color: #8d8f94;
  }
  .group-point {
    justify-content: space-evenly;
